@@ -100,17 +100,21 @@ def shortest_path(source, target):
     # so, while person != target:
         # get movies that the person is in
         # for each movie, get users
-    
+
     # state = target user's ID
     # action = check co-stars
     # parent = user from which we came
-    
+
     graph = Graph(source, target)
-    graph.solve()
+    try:
+        graph.solve()
+    except Exception as _:
+        return None
+
     movie_ids, star_ids = graph.solution
     path = []
     for i in range(len(movie_ids)):
-        path.append([movie_ids[i], star_ids[i]])
+        path.append((movie_ids[i], star_ids[i]))
     return path
 
 class Graph:
@@ -137,10 +141,10 @@ class Graph:
 
         # Keep looping until solution found
         while True:
-            
-            # If nothing left in frontier, then no path
-            if frontier.empty():
-                raise Exception("no solution")
+
+            # # If nothing left in frontier, then no path
+            # if frontier.empty():
+            #     raise Exception("no solution")
 
             # Choose a node from the frontier
             node = frontier.remove()
@@ -157,7 +161,7 @@ class Graph:
                 actions.reverse()
                 cells.reverse()
                 self.solution = (actions, cells)
-                return 
+                return
 
             # Mark node as explored
             self.explored.add(node.state)
@@ -168,7 +172,7 @@ class Graph:
                     child = Node(state=state, parent=node, action=action)
                     frontier.add(child)
 
-            
+
         # so, what are the actions, states, and parents?
         # state = if ID matches target ID
         # parents = star which they are linked to.
